@@ -25,21 +25,38 @@ class NumberPhone(db.Model):
     number = db.Column(db.String(14), unique=True, index=True, nullable=False)
 
 
-@app.context_processor
-def inject_now():
-    return {'now': datetime.utcnow()}
-
-
+# Обработчики страниц
 @app.route('/')
 def index():
     count_db = NumberPhone.query.count()
     return render_template('index.html', count_db=count_db)
 
 
-@app.route('/about/')
+@app.route('/about')
 def about():
     return render_template('about.html')
 
+
+# Конец обработчиков страниц
+
+
+# Служебные обработчики
+@app.errorhandler(404)
+def handle_bad_request_404(e):
+    return render_template('404.html')
+
+
+@app.errorhandler(503)
+def handle_bad_request_503(e):
+    return render_template('503.html')
+
+
+@app.context_processor
+def inject_now():
+    return {'now': datetime.utcnow()}
+
+
+# Конец служебных обработчиков
 
 if __name__ == "__main__":
     app.run(debug=True)
