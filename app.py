@@ -9,8 +9,7 @@ initialize_app(app)
 # Обработчики страниц
 @app.route('/')
 def index():
-    count_db = NumberPhone.query.count()
-    return render_template('index.html', count_db=count_db)
+    return render_template('index.html', count_db=NumberPhone.query.count())
 
 
 @app.route('/about/')
