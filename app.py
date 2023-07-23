@@ -1,14 +1,14 @@
 import os
 from datetime import datetime
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, request, send_from_directory, redirect
 from sqlalchemy import desc
-from modules.db import initialize_app, NumberPhone, db
+from modules.database import initialize_app, NumberPhone, dbase
 
 app = Flask(__name__)
 initialize_app(app)
 
 with app.app_context():
-    db.create_all()
+    dbase.create_all()
 
 
 # Обработчики страниц
@@ -21,18 +21,32 @@ def index():
 def db():
     number_phone = NumberPhone.query.with_entities(NumberPhone.id, NumberPhone.number).order_by(
         desc(NumberPhone.id)).all()
-
     return render_template('db.html', all_number_db=number_phone)
 
 
-@app.route('/db/<number>')
+@app.route('/db/<int:number>')
 def more(number):
     return render_template('more.html', number=number)
 
 
-@app.route('/db/add/')
-def add(number):
-    return render_template('add.html', number=number)
+@app.route('/db/add/', methods=['GET', 'POST'])
+def add():
+    if request.method == 'POST':
+        number = request.form.get('nums')
+        telegram_id = request.form.get('telegram_id')
+        # Создание нового объекта NumberPhone и добавление его в базу данных
+        number_entry = NumberPhone(number=int(number), telegram_id=int(telegram_id))
+        dbase.session.add(number_entry)
+        dbase.session.commit()
+
+        return redirect('/')
+
+    return render_template('add.html')
+
+
+@app.route('/about/')
+def about():
+    return render_template('about.html')
 
 
 # Конец обработчиков страниц

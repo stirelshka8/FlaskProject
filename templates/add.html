@@ -9,6 +9,18 @@
 
 
 {% block greetings %}
+
+    <h1>Добавить номер мошенника</h1>
+    <form method="POST" action="/db/add/">
+        <label for="nums">Номер телефона:</label>
+        <input type="text" id="nums" name="nums" required><br><br>
+
+        <label for="telegram_id">Ваш телеграм ID:</label>
+        <input type="text" id="telegram_id" name="telegram_id" required><br><br>
+
+        <input type="submit" value="Добавить">
+    </form>
+
 {% endblock %}
 
 {% block content %}
