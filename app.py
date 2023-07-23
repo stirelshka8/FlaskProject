@@ -1,9 +1,14 @@
+import os
 from datetime import datetime
-from flask import Flask, render_template
-from modules.db import initialize_app, NumberPhone
+from flask import Flask, render_template, send_from_directory
+from sqlalchemy import desc
+from modules.db import initialize_app, NumberPhone, db
 
 app = Flask(__name__)
 initialize_app(app)
+
+with app.app_context():
+    db.create_all()
 
 
 # Обработчики страниц
@@ -12,13 +17,27 @@ def index():
     return render_template('index.html', count_db=NumberPhone.query.count())
 
 
-@app.route('/about/')
-def about():
-    return render_template('about.html')
+@app.route('/db/')
+def db():
+    number_phone = NumberPhone.query.with_entities(NumberPhone.id, NumberPhone.number).order_by(
+        desc(NumberPhone.id)).all()
+
+    return render_template('db.html', all_number_db=number_phone)
+
+
+@app.route('/db/<number>')
+def more(number):
+    return render_template('more.html', number=number)
+
+
+@app.route('/db/add/')
+def add(number):
+    return render_template('add.html', number=number)
 
 
 # Конец обработчиков страниц
 
+# --------------------------
 
 # Служебные обработчики
 @app.errorhandler(404)
@@ -36,7 +55,13 @@ def inject_now():
     return {'now': datetime.utcnow()}
 
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
 # Конец служебных обработчиков
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='192.168.1.10', port=5000, debug=True)

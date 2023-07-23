@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block description %}111{% endblock %}
+{% block keywords %}2222{% endblock %}
+{% block robots %}3333333{% endblock %}
+
+{% block title %}База данных{% endblock %}
+
+
+
+{% block greetings %}
+{% endblock %}
+
+{% block content %}
+
+
+
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Номер телефона</th>
+             <th>Тег</th>
+          </tr>
+          {% for one_number in all_number_db %}
+          <tr>
+            <td>{{ one_number[0] }}</td>
+            <td>{{ one_number[1] }}</td><td>кг</td><td><a class="btn btn-outline-primary" target="_self" href="/db/{{ one_number[0] }}" role="button">Подробнее</a>  </td>
+          </tr>
+          {% endfor %}
+        </table>
+
+{% endblock %}

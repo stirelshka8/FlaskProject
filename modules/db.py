@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 
@@ -23,6 +24,22 @@ class NumberPhone(db.Model):
     tablename = 'number_phone'
     id = db.Column(db.Integer, primary_key=True)
     number = db.Column(db.String(14), unique=True, index=True, nullable=False)
+    telegram_id = db.Column(db.Integer)
+    registration_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Tag(db.Model):
+    __tablename__ = 'tag'
+    id = db.Column(db.Integer, primary_key=True)
+    number_id = db.Column(db.Integer, db.ForeignKey('number_phone.id'), nullable=False)
+    tag = db.Column(db.String(50), nullable=False)
+
+
+class Comment(db.Model):
+    __tablename__ = 'comment'
+    id = db.Column(db.Integer, primary_key=True)
+    number_id = db.Column(db.Integer, db.ForeignKey('number_phone.id'), nullable=False)
+    comment = db.Column(db.Text, nullable=False)
 
 
 def create_tables():
