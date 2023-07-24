@@ -10,15 +10,22 @@
 
 {% block greetings %}
 
-    <h1>Добавить номер мошенника</h1>
-    <form method="POST" action="/db/add/">
-        <label for="nums">Номер телефона:</label>
-        <input type="text" id="nums" name="nums" required><br><br>
+    <h1>Add Number</h1>
+    <form action="/db/add/" method="POST">
 
-        <label for="telegram_id">Ваш телеграм ID:</label>
+        <label for="number">Number:</label>
+        <input type="text" id="number" name="number" required><br><br>
+
+        <label for="telegram_id">Telegram ID:</label>
         <input type="text" id="telegram_id" name="telegram_id" required><br><br>
 
-        <input type="submit" value="Добавить">
+        <label for="tag">Tag:</label>
+        <input type="text" id="tag" name="tag" required><br><br>
+
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment" required></textarea><br><br>
+
+        <input type="submit" value="Add Record">
     </form>
 
 {% endblock %}

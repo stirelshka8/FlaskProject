@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from flask import Flask, render_template, send_from_directory, request, send_from_directory, redirect
 from sqlalchemy import desc
-from modules.database import initialize_app, NumberPhone, dbase
+from modules.database import initialize_app, NumberPhone, Tag, Comment, dbase
 
 app = Flask(__name__)
 initialize_app(app)
@@ -32,14 +32,24 @@ def more(number):
 @app.route('/db/add/', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
-        number = request.form.get('nums')
+        number = request.form.get('number')
         telegram_id = request.form.get('telegram_id')
-        # Создание нового объекта NumberPhone и добавление его в базу данных
-        number_entry = NumberPhone(number=int(number), telegram_id=int(telegram_id))
-        dbase.session.add(number_entry)
-        dbase.session.commit()
+        tag = request.form.get('tag')
+        comment = request.form.get('comment')
 
-        return redirect('/')
+        new_number = NumberPhone(number=number, telegram_id=telegram_id)
+        db.session.add(new_number)
+        db.session.commit()
+
+        new_tag = Tag(number_id=new_number.id, tag=tag)
+        db.session.add(new_tag)
+        db.session.commit()
+
+        new_comment = Comment(number_id=new_number.id, comment=comment)
+        db.session.add(new_comment)
+        db.session.commit()
+
+        return redirect("/")
 
     return render_template('add.html')
 
@@ -78,4 +88,5 @@ def favicon():
 # Конец служебных обработчиков
 
 if __name__ == "__main__":
-    app.run(host='192.168.1.10', port=5000, debug=True)
+    # app.run(host='192.168.1.10', port=5000, debug=True)
+    app.run(debug=True)
