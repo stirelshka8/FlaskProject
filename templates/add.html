@@ -6,12 +6,9 @@
 
 {% block title %}Добавить{% endblock %}
 
-{% block greetings %}
-{% endblock %}
-
 {% block welcome_text %}
-
-    <form action="/db/add/" method="POST">
+<div style="display:flex; justify-content:flex-end;">
+    <form action="/db/add/" method="POST" style="width: 50%;">
         <label for="number">Номер:</label><br>
         <select name="country">
             <option value="+7">Россия (+7)</option>
@@ -35,10 +32,13 @@
 
         <input type="submit" value="Добавить"><br><br>
 
-        <h4>Нажимая кнопку "Добавить" Вы подтверждаете все возможные риски и последствия.</h4>
+        <h4>Нажимая кнопку "Добавить" Вы подтверждаете, что осознаете все возможные риски и последствия.</h4>
     </form>
 
+    <div style="width: 50%;">
+        <h1>Пояснение</h1>
+    </div>
+
+</div>
 {% endblock %}
 
-{% block content %}
-{% endblock %}

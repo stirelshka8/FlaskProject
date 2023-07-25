@@ -38,19 +38,21 @@
 
 {% if all_number_db.pages > 1 %}
     {% if all_number_db.prev_num %}
-        <a href="{{ url_for('db', page=all_number_db.prev_num, per_page=all_number_db.per_page) }}">Previous</a>
+        <a class="btn btn-outline-dark" href="{{ url_for('db', page=all_number_db.prev_num, per_page=all_number_db.per_page) }}" role="button"><<</a>
     {% endif %}
 
     {% for num in range(1, all_number_db.pages + 1) %}
         {% if num == all_number_db.page %}
-            <strong>{{ num }}</strong>
+            <a class="btn btn-success" href="#" role="button">{{ num }}</a>
         {% else %}
-            <a href="{{ url_for('db', page=num, per_page=all_number_db.per_page) }}">{{ num }}</a>
+            {% if num >= all_number_db.page - 2 and num <= all_number_db.page + 2 %}
+                <a class="btn btn-primary" href="{{ url_for('db', page=num, per_page=all_number_db.per_page) }}" role="button">{{ num }}</a>
+            {% endif %}
         {% endif %}
     {% endfor %}
 
     {% if all_number_db.next_num %}
-        <a href="{{ url_for('db', page=all_number_db.next_num, per_page=all_number_db.per_page) }}">Next</a>
+        <a class="btn btn-outline-dark" href="{{ url_for('db', page=all_number_db.next_num, per_page=all_number_db.per_page) }}" role="button">>></a>
     {% endif %}
 {% endif %}
 

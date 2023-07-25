@@ -7,14 +7,19 @@ from modules.database import initialize_app, NumberPhone, Tag, Comment, dbase
 app = Flask(__name__)
 initialize_app(app)
 
-with app.app_context():
-    dbase.create_all()
+
+# with app.app_context():
+#     dbase.create_all()
 
 
 # Обработчики страниц
 @app.route('/')
 def index():
-    return render_template('index.html', count_db=NumberPhone.query.count())
+    try:
+        count_db = NumberPhone.query.count()
+        return render_template('index.html', count_db=count_db)
+    except:
+        return render_template('index.html', count_db="...")
 
 
 @app.route('/db/')
@@ -24,10 +29,13 @@ def db():
     per_page = request.args.get('per_page', 50, type=int)
 
     # получаем список номеров телефонов с использованием пагинации
-    number_phone = NumberPhone.query.with_entities(NumberPhone.id, NumberPhone.number, Tag.tag).order_by(
-        desc(NumberPhone.id)).join(Tag).paginate(page=page, per_page=per_page)
+    try:
+        number_phone = NumberPhone.query.with_entities(NumberPhone.id, NumberPhone.number, Tag.tag).order_by(
+            desc(NumberPhone.id)).join(Tag).paginate(page=page, per_page=per_page)
 
-    return render_template('db.html', all_number_db=number_phone)
+        return render_template('db.html', all_number_db=number_phone)
+    except:
+        return render_template('503.html'), 503
 
 
 @app.route('/db/<int:number>')
@@ -46,19 +54,22 @@ def add():
 
         format_number = f"{selected_country}{number}"
 
-        new_number = NumberPhone(number=format_number, telegram_id=telegram_id)
-        dbase.session.add(new_number)
-        dbase.session.commit()
+        try:
+            new_number = NumberPhone(number=format_number, telegram_id=telegram_id)
+            dbase.session.add(new_number)
+            dbase.session.commit()
 
-        new_tag = Tag(number_id=new_number.id, tag=tag)
-        dbase.session.add(new_tag)
-        dbase.session.commit()
+            new_tag = Tag(number_id=new_number.id, tag=tag)
+            dbase.session.add(new_tag)
+            dbase.session.commit()
 
-        new_comment = Comment(number_id=new_number.id, comment=comment)
-        dbase.session.add(new_comment)
-        dbase.session.commit()
+            new_comment = Comment(number_id=new_number.id, comment=comment)
+            dbase.session.add(new_comment)
+            dbase.session.commit()
+        except:
+            return render_template('503.html'), 503
 
-        return redirect("/")
+        return redirect("/db/")
 
     return render_template('add.html')
 

@@ -2,9 +2,13 @@
 
 {% block robots %}noindex,nofollow{% endblock %}
 
-{% block content %}
+{% block greetings %}
     <h1>Ошибка 503</h1>
     <h4>Сервер опять капризничает...</h4>
 
     <p><a href="{{ url_for('index') }}">Назад</a></p>
+{% endblock %}
+
+{% block content %}
+    {{ err }}
 {% endblock %}
