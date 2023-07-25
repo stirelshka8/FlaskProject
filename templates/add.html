@@ -6,26 +6,36 @@
 
 {% block title %}Добавить{% endblock %}
 
-
-
 {% block greetings %}
+{% endblock %}
 
-    <h1>Add Number</h1>
+{% block welcome_text %}
+
     <form action="/db/add/" method="POST">
+        <label for="number">Номер:</label><br>
+        <select name="country">
+            <option value="+7">Россия (+7)</option>
+        </select>
 
-        <label for="number">Number:</label>
         <input type="text" id="number" name="number" required><br><br>
 
-        <label for="telegram_id">Telegram ID:</label>
+        <label for="telegram_id">Ваш Telegram ID:</label><br>
         <input type="text" id="telegram_id" name="telegram_id" required><br><br>
 
-        <label for="tag">Tag:</label>
-        <input type="text" id="tag" name="tag" required><br><br>
+        <label for="tag">Тег:</label><br>
+        <select id="tag" name="tag">
+            <option value="мошенник">Мошенник</option>
+            <option value="ПРОВЕРКА 1">ПРОВЕРКА 1</option>
+            <option value="ПРОВЕРКА 2">ПРОВЕРКА 2</option>
+            <option value="ПРОВЕРКА 3">ПРОВЕРКА 3</option>
+        </select><br><br>
 
-        <label for="comment">Comment:</label>
-        <textarea id="comment" name="comment" required></textarea><br><br>
+        <label for="comment">Комментарий:</label><br>
+        <textarea id="comment" name="comment" required rows="5" cols="50"></textarea><br><br>
 
-        <input type="submit" value="Add Record">
+        <input type="submit" value="Добавить"><br><br>
+
+        <h4>Нажимая кнопку "Добавить" Вы подтверждаете все возможные риски и последствия.</h4>
     </form>
 
 {% endblock %}

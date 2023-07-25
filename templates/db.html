@@ -12,17 +12,49 @@
 {% endblock %}
 
 {% block content %}
-        <table>
-          <tr>
-            <th>ID</th>
-            <th>Номер телефона</th>
-             <th>Тег</th>
-          </tr>
-          {% for one_number in all_number_db %}
-          <tr>
-            <td>{{ one_number[0] }}</td>
-            <td>{{ one_number[1] }}</td><td>кг</td><td><a class="btn btn-outline-primary" target="_self" href="/db/{{ one_number[0] }}" role="button">Подробнее</a>  </td>
-          </tr>
-          {% endfor %}
+
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID номера</th>
+                    <th>Номер</th>
+                    <th>Тег</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for number in all_number_db.items %}
+                    <tr>
+                        <td>{{ number.id }}</td>
+                        <td>{{ number.number }}</td>
+                        <td>{{ number.tag }}</td>
+                        <td><a class="btn btn-outline-primary" target="_self" href="/db/{{ number.id }}" role="button">Подробнее</a>  </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
+    </div>
+
+{% if all_number_db.pages > 1 %}
+    {% if all_number_db.prev_num %}
+        <a href="{{ url_for('db', page=all_number_db.prev_num, per_page=all_number_db.per_page) }}">Previous</a>
+    {% endif %}
+
+    {% for num in range(1, all_number_db.pages + 1) %}
+        {% if num == all_number_db.page %}
+            <strong>{{ num }}</strong>
+        {% else %}
+            <a href="{{ url_for('db', page=num, per_page=all_number_db.per_page) }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if all_number_db.next_num %}
+        <a href="{{ url_for('db', page=all_number_db.next_num, per_page=all_number_db.per_page) }}">Next</a>
+    {% endif %}
+{% endif %}
+
+
 {% endblock %}
+
+

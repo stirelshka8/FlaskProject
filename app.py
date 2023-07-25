@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from flask import Flask, render_template, send_from_directory, request, send_from_directory, redirect
+from flask import Flask, render_template, request, send_from_directory, redirect
 from sqlalchemy import desc
 from modules.database import initialize_app, NumberPhone, Tag, Comment, dbase
 
@@ -19,8 +19,14 @@ def index():
 
 @app.route('/db/')
 def db():
-    number_phone = NumberPhone.query.with_entities(NumberPhone.id, NumberPhone.number).order_by(
-        desc(NumberPhone.id)).all()
+    # добавляем пагинацию
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 50, type=int)
+
+    # получаем список номеров телефонов с использованием пагинации
+    number_phone = NumberPhone.query.with_entities(NumberPhone.id, NumberPhone.number, Tag.tag).order_by(
+        desc(NumberPhone.id)).join(Tag).paginate(page=page, per_page=per_page)
+
     return render_template('db.html', all_number_db=number_phone)
 
 
@@ -32,22 +38,25 @@ def more(number):
 @app.route('/db/add/', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
+        selected_country = request.form.get('country')
         number = request.form.get('number')
         telegram_id = request.form.get('telegram_id')
         tag = request.form.get('tag')
         comment = request.form.get('comment')
 
-        new_number = NumberPhone(number=number, telegram_id=telegram_id)
-        db.session.add(new_number)
-        db.session.commit()
+        format_number = f"{selected_country}{number}"
+
+        new_number = NumberPhone(number=format_number, telegram_id=telegram_id)
+        dbase.session.add(new_number)
+        dbase.session.commit()
 
         new_tag = Tag(number_id=new_number.id, tag=tag)
-        db.session.add(new_tag)
-        db.session.commit()
+        dbase.session.add(new_tag)
+        dbase.session.commit()
 
         new_comment = Comment(number_id=new_number.id, comment=comment)
-        db.session.add(new_comment)
-        db.session.commit()
+        dbase.session.add(new_comment)
+        dbase.session.commit()
 
         return redirect("/")
 
