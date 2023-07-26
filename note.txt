@@ -1,0 +1,3 @@
+gunicorn --bind 0.0.0.0:5000 wsgi:app
+
+https://flask.ivan-shamaev.ru/app-flask-service-wsgi-gunicorn-settings/

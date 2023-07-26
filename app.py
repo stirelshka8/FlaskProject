@@ -11,9 +11,11 @@ logging.basicConfig(level=logging.INFO, filename="flask_log.log", filemode="a",
 app = Flask(__name__)
 initialize_app(app)
 
-
-# with app.app_context():
-#     dbase.create_all()
+try:
+    with app.app_context():
+        dbase.create_all()
+except Exception as ex:
+    logging.error(ex)
 
 
 # Обработчики страниц
@@ -22,8 +24,8 @@ def index():
     try:
         count_db = NumberPhone.query.count()
         return render_template('index.html', count_db=count_db)
-    except Exception as ex:
-        logging.error(ex)
+    except Exception as exc:
+        logging.error(exc)
         return render_template('index.html', count_db="...")
 
 
@@ -39,8 +41,8 @@ def db():
             desc(NumberPhone.id)).join(Tag).paginate(page=page, per_page=per_page)
 
         return render_template('db.html', all_number_db=number_phone)
-    except Exception as ex:
-        logging.error(ex)
+    except Exception as exc:
+        logging.error(exc)
         return render_template('503.html'), 503
 
 
@@ -72,8 +74,8 @@ def add():
             new_comment = Comment(number_id=new_number.id, comment=comment)
             dbase.session.add(new_comment)
             dbase.session.commit()
-        except Exception as ex:
-            logging.error(ex)
+        except Exception as exc:
+            logging.error(exc)
             return render_template('503.html'), 503
 
         return redirect("/db/")
@@ -116,4 +118,4 @@ def favicon():
 
 if __name__ == "__main__":
     # app.run(host='192.168.1.10', port=5000, debug=True)
-    app.run(debug=True)
+    app.run(debug=False)
