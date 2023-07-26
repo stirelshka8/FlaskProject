@@ -25,6 +25,8 @@ class NumberPhone(dbase.Model):
     id = dbase.Column(dbase.Integer, primary_key=True)
     number = dbase.Column(dbase.String(14), unique=True, index=True, nullable=False)
     telegram_id = dbase.Column(dbase.Integer)
+    name = dbase.Column(dbase.String(50))
+    email = dbase.Column(dbase.String(150))
     registration_date = dbase.Column(dbase.DateTime, default=datetime.utcnow)
 
 
@@ -39,7 +41,9 @@ class Comment(dbase.Model):
     __tablename__ = 'comment'
     id = dbase.Column(dbase.Integer, primary_key=True)
     number_id = dbase.Column(dbase.Integer, dbase.ForeignKey('number_phone.id'), nullable=False)
+    name = dbase.Column(dbase.String(50))
     comment = dbase.Column(dbase.Text, nullable=False)
+    registration_date = dbase.Column(dbase.DateTime, default=datetime.utcnow)
 
 
 def create_tables():

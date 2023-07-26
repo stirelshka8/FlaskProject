@@ -1,13 +1,69 @@
 {% extends "base.html" %}
 
-{% block robots %}noindex,nofollow{% endblock %}
+{% block robots %}
+    noindex,nofollow
+{% endblock %}
 
-{% block title %}База данных{% endblock %}
-
-
+{% block title %}
+    База данных
+{% endblock %}
 
 {% block greetings %}
-{{ number }}
+    <h1>{{ number.number }}</h1>
+
+    <h2>
+        {% for tag in tags %}
+            {{ tag.tag }}
+        {% endfor %}
+    </h2>
+
+    <br>
+    <div style="display:flex; justify-content:flex-end;">
+    <form action="/db/{{ number.id }}?page={{ comments.page }}" method="POST" style="width: 43%; background-color: transparent; border: none;">
+        <h2>Добавить комментарий</h2><br>
+        <label for="name">* Ваше имя:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="comment">* Ваш комментарий:</label><br>
+        <textarea id="comment" name="comment" rows="4" cols="50" required></textarea><br><br>
+
+        <input type="submit" value="Отправить"><br><br>
+        <h4>Нажимая кнопку "Отправить" Вы подтверждаете, что осознаете все возможные риски и последствия.</h4>
+        <h4>Поля помеченные * обязательны к заполнению.</h4>
+    </form>
+
+    <div style="width: 50%;">
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="comments-container">
+                    <div class="comment">
+                        <div class="comment-header">
+                            <span class="comment-author">{{ comment.name }}</span>
+                            <span class="comment-date">{{ comment.registration_date }}</span>
+                        </div>
+                        <div class="comment-content">
+                            <p>{{ comment.comment }}</p>
+                        </div>
+                    </div>
+                </div><br><br>
+            {% endfor %}
+
+            <div class="pagination text-center">
+                {% for num in comments.iter_pages() %}
+                    {% if num %}
+                        {% if comments.page == num %}
+                            <a class="btn btn-success" href="#" role="button">{{ num }}</a>
+                        {% else %}
+                            <a class="btn btn-primary" href="{{ url_for('more', number=number.id, page=num) }}" role="button">{{ num }}</a>
+                        {% endif %}
+                    {% else %}
+                        ...
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}

@@ -7,38 +7,51 @@
 {% block title %}Добавить{% endblock %}
 
 {% block welcome_text %}
-<div style="display:flex; justify-content:flex-end;">
-    <form action="/db/add/" method="POST" style="width: 50%;">
-        <label for="number">Номер:</label><br>
-        <select name="country">
-            <option value="+7">Россия (+7)</option>
-        </select>
+            <div style="display:flex; justify-content:flex-end;">
+                <form action="/db/add/" method="POST" style="width: 43%;">
+                    <label for="number">* Номер:</label><br>
+                    <select name="country">
+                        <option value="+7">Россия (+7)</option>
+                    </select>
+                    <input type="text" id="number" name="number" required><br>
+                    <span>Формат номера телефона - 8002221122</span><br><br>
 
-        <input type="text" id="number" name="number" required><br><br>
+                    <label for="user_name">* Ваше Имя:</label><br>
+                    <input type="text" id="user_name" name="user_name" required><br><br>
 
-        <label for="telegram_id">Ваш Telegram ID:</label><br>
-        <input type="text" id="telegram_id" name="telegram_id" required><br><br>
+                    <label for="user_email">* Ваше E-Mail:</label><br>
+                    <input type="text" id="user_email" name="user_email" required><br><br>
 
-        <label for="tag">Тег:</label><br>
-        <select id="tag" name="tag">
-            <option value="мошенник">Мошенник</option>
-            <option value="ПРОВЕРКА 1">ПРОВЕРКА 1</option>
-            <option value="ПРОВЕРКА 2">ПРОВЕРКА 2</option>
-            <option value="ПРОВЕРКА 3">ПРОВЕРКА 3</option>
-        </select><br><br>
+                    <label for="telegram_id">Ваш Telegram ID:</label><br>
+                    <input type="text" id="telegram_id" name="telegram_id" value="000000000" required><br><br>
 
-        <label for="comment">Комментарий:</label><br>
-        <textarea id="comment" name="comment" required rows="5" cols="50"></textarea><br><br>
+                    <label for="tag">* Тег:</label><br>
+                    <select id="tag" name="tag">
+                        <option value="Мошенник">Мошенник</option>
+                        <option value="ПРОВЕРКА 1">ПРОВЕРКА 1</option>
+                        <option value="ПРОВЕРКА 2">ПРОВЕРКА 2</option>
+                        <option value="ПРОВЕРКА 3">ПРОВЕРКА 3</option>
+                    </select><br><br>
 
-        <input type="submit" value="Добавить"><br><br>
+                    <input type="submit" value="Добавить"><br><br>
 
-        <h4>Нажимая кнопку "Добавить" Вы подтверждаете, что осознаете все возможные риски и последствия.</h4>
-    </form>
+                    <h4>Нажимая кнопку "Добавить" Вы подтверждаете, что осознаете все возможные риски и последствия.</h4>
+                    <h4>Поля помеченные * обязательны к заполнению.</h4>
+                </form>
 
-    <div style="width: 50%;">
-        <h1>Пояснение</h1>
-    </div>
+                <div style="width: 50%;">
+                    <h1>Пояснение</h1>
 
-</div>
+                    <div class="question-container">
+                        <h3>Вопрос:</h3>
+                        <p>Почему необходимо вводить свои данные?</p>
+                    </div>
+
+                    <div class="answer-container">
+                        <h3>Ответ:</h3>
+                        <p>Это необходимо для Вашей идентификации и оповещения в случае если номер телефона который Вы добавите будет удален, скрыт или над ним будут проводиться иные действия. </p>
+                        <p>Руководствуясь Федеральным законом "О персональных данных" от 27.07.2006 N 152-ФЗ, мы не разглашаем Ваши персональные данные.</p>
+                    </div>
+                </div>
+            </div>
 {% endblock %}
-

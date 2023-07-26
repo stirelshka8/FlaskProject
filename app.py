@@ -46,9 +46,27 @@ def db():
         return render_template('503.html'), 503
 
 
-@app.route('/db/<int:number>')
+@app.route('/db/<int:number>', methods=['GET', 'POST'])
 def more(number):
-    return render_template('more.html', number=number)
+    number_phone_entry = NumberPhone.query.filter_by(id=number).first()
+    tags_entries = Tag.query.filter_by(number_id=number).all()
+
+    page = request.args.get('page', 1, type=int)
+    per_page = 5
+    comments_entries = Comment.query.filter_by(number_id=number).order_by(Comment.id.desc())\
+        .paginate(page=page, per_page=per_page)
+
+    if request.method == 'POST':
+        selected_name = request.form.get('name')
+        selected_comment = request.form.get('comment')
+
+        new_comment = Comment(number_id=number, name=selected_name, comment=selected_comment)
+        dbase.session.add(new_comment)
+        dbase.session.commit()
+
+        return redirect(request.url)
+
+    return render_template('more.html', number=number_phone_entry, tags=tags_entries, comments=comments_entries)
 
 
 @app.route('/db/add/', methods=['GET', 'POST'])
@@ -57,13 +75,14 @@ def add():
         selected_country = request.form.get('country')
         number = request.form.get('number')
         telegram_id = request.form.get('telegram_id')
+        name = request.form.get('user_name')
+        email = request.form.get('user_email')
         tag = request.form.get('tag')
-        comment = request.form.get('comment')
 
         format_number = f"{selected_country}{number}"
 
         try:
-            new_number = NumberPhone(number=format_number, telegram_id=telegram_id)
+            new_number = NumberPhone(number=format_number, telegram_id=telegram_id, name=name, email=email)
             dbase.session.add(new_number)
             dbase.session.commit()
 
@@ -71,9 +90,6 @@ def add():
             dbase.session.add(new_tag)
             dbase.session.commit()
 
-            new_comment = Comment(number_id=new_number.id, comment=comment)
-            dbase.session.add(new_comment)
-            dbase.session.commit()
         except Exception as exc:
             logging.error(exc)
             return render_template('503.html'), 503
@@ -117,5 +133,5 @@ def favicon():
 # Конец служебных обработчиков
 
 if __name__ == "__main__":
-    # app.run(host='192.168.1.10', port=5000, debug=True)
-    app.run(debug=True)
+    app.run(host='192.168.1.10', port=5000, debug=True)
+    # app.run(debug=True)
