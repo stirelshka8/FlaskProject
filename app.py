@@ -1,8 +1,12 @@
 import os
-from datetime import datetime
-from flask import Flask, render_template, request, send_from_directory, redirect
+import logging
 from sqlalchemy import desc
+from datetime import datetime
 from modules.database import initialize_app, NumberPhone, Tag, Comment, dbase
+from flask import Flask, render_template, request, send_from_directory, redirect
+
+logging.basicConfig(level=logging.INFO, filename="flask_log.log", filemode="a",
+                    format="%(asctime)s %(levelname)s %(message)s")
 
 app = Flask(__name__)
 initialize_app(app)
@@ -18,7 +22,8 @@ def index():
     try:
         count_db = NumberPhone.query.count()
         return render_template('index.html', count_db=count_db)
-    except:
+    except Exception as ex:
+        logging.error(ex)
         return render_template('index.html', count_db="...")
 
 
@@ -34,7 +39,8 @@ def db():
             desc(NumberPhone.id)).join(Tag).paginate(page=page, per_page=per_page)
 
         return render_template('db.html', all_number_db=number_phone)
-    except:
+    except Exception as ex:
+        logging.error(ex)
         return render_template('503.html'), 503
 
 
@@ -66,7 +72,8 @@ def add():
             new_comment = Comment(number_id=new_number.id, comment=comment)
             dbase.session.add(new_comment)
             dbase.session.commit()
-        except:
+        except Exception as ex:
+            logging.error(ex)
             return render_template('503.html'), 503
 
         return redirect("/db/")

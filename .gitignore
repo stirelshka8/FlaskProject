@@ -1,3 +1,4 @@
 /.env
 /test.py
 /templates/test.html
+/flask_log.log
