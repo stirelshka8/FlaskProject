@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block description %}111{% endblock %}
-{% block keywords %}2222{% endblock %}
-{% block robots %}3333333{% endblock %}
+{% block description %}Stop Scammers - остановите мошенников!{% endblock %}
+{% block keywords %}Мошенники, скам, безопасность{% endblock %}
+{% block robots %}index,follow{% endblock %}
 
-{% block title %}Home{% endblock %}
+{% block title %}"Stop Scammers" - остановите мошенников! 🚫{% endblock %}
 
 {% block greetings %}
-<div class="text-center">
-    <h1> "Stop Scammers" - остановите мошенников! 🚫  </h1>
-</div>
+    <div class="text-center">
+        <h1> "Stop Scammers" - остановите мошенников! 🚫  </h1>
+    </div>
 {% endblock %}
 
 {% block welcome_text %}
@@ -18,16 +18,12 @@
         <p>🌐 Веб-платформа, посвященная борьбе с телефонным мошенничеством. 📵</p>
         <br>
     </div>
-
-
     <form action="/" method="POST" style="width: 43%;">
-                    <label for="number">Поиск номера в базе данных:</label><br>
-                    <input type="text" id="number" name="number" required><br>
-                    <h4>Вводите номер в формате  +79992221122</h4><br>
-                    <input type="submit" value="Поиск"><br>
-
-                </form>
-
+        <label for="number">Поиск номера в базе данных:</label><br>
+        <input type="text" id="number" name="number" required><br>
+        <h4>Вводите номер в формате  +79992221122</h4><br>
+        <input type="submit" value="Поиск"><br>
+    </form>
 {% endblock %}
 
 {% block titles %}
