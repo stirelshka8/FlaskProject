@@ -19,11 +19,20 @@ except Exception as ex:
 
 
 # Обработчики страниц
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     try:
-        count_db = NumberPhone.query.count()
-        return render_template('index.html', count_db=count_db)
+        if request.method == 'GET':
+            count_db = NumberPhone.query.count()
+            return render_template('index.html', count_db=count_db)
+        elif request.method == 'POST':
+            selected_name = request.form.get('number')
+            search_phone_number = NumberPhone.query.filter_by(number=selected_name).first()
+
+            if search_phone_number is None:
+                return render_template('not_number.html')
+            else:
+                return redirect(f"/db/{search_phone_number.id}")
     except Exception as exc:
         logging.error(exc)
         return render_template('index.html', count_db="...")
@@ -53,7 +62,7 @@ def more(number):
 
     page = request.args.get('page', 1, type=int)
     per_page = 5
-    comments_entries = Comment.query.filter_by(number_id=number).order_by(Comment.id.desc())\
+    comments_entries = Comment.query.filter_by(number_id=number).order_by(Comment.id.desc()) \
         .paginate(page=page, per_page=per_page)
 
     if request.method == 'POST':

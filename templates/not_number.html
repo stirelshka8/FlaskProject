@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block robots %}noindex,nofollow{% endblock %}
+
+{% block greetings %}
+    <h1>Уууууупс..</h1>
+    <h4>А такого номера нет!</h4>
+
+    <p><a href="{{ url_for('index') }}">Назад</a></p>
+{% endblock %}
+
+{% block content %}
+    {{ err }}
+{% endblock %}
